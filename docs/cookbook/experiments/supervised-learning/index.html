@@ -1,0 +1,298 @@
+<!doctype html><html lang=zh-Hans dir=ltr class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-cookbook/experiments/supervised-learning" data-has-hydrated=false><head><meta charset=UTF-8><meta name=generator content="Docusaurus v3.10.1"><title data-rh=true>SFT 对比实验 | TCRL Docs</title><meta data-rh=true name=viewport content="width=device-width, initial-scale=1.0"/><meta data-rh=true name=twitter:card content=summary_large_image /><meta data-rh=true property=og:image content=/img/docusaurus-social-card.jpg /><meta data-rh=true name=twitter:image content=/img/docusaurus-social-card.jpg /><meta data-rh=true property=og:url content=/docs/cookbook/experiments/supervised-learning /><meta data-rh=true property=og:locale content=zh_Hans /><meta data-rh=true property=og:locale:alternate content=en /><meta data-rh=true name=docusaurus_locale content=zh-Hans /><meta data-rh=true name=docsearch:language content=zh-Hans /><meta data-rh=true name=docusaurus_version content=current /><meta data-rh=true name=docusaurus_tag content=docs-default-current /><meta data-rh=true name=docsearch:version content=current /><meta data-rh=true name=docsearch:docusaurus_tag content=docs-default-current /><meta data-rh=true property=og:title content="SFT 对比实验 | TCRL Docs"/><meta data-rh=true name=description content="本章节用于记录基于 tcrlinfra 的 SFT 对比实验结果。实验 1-2 验证 TCRL 与 Tinker 的训练等价性；实验 3-4 通过与多个 Proxy Model（小模型）和 Oracle Model（大模型）的结果对比，展示从小模型到大模型再到 TCRL SFT 后模型的性能提升路径，验证 TCRL（chatsl）在文本分类任务上的有效性。"/><meta data-rh=true property=og:description content="本章节用于记录基于 tcrlinfra 的 SFT 对比实验结果。实验 1-2 验证 TCRL 与 Tinker 的训练等价性；实验 3-4 通过与多个 Proxy Model（小模型）和 Oracle Model（大模型）的结果对比，展示从小模型到大模型再到 TCRL SFT 后模型的性能提升路径，验证 TCRL（chatsl）在文本分类任务上的有效性。"/><link data-rh=true rel=icon href=/img/logo.svg /><link data-rh=true rel=canonical href=/docs/cookbook/experiments/supervised-learning /><link data-rh=true rel=alternate href=/docs/cookbook/experiments/supervised-learning hreflang=zh-Hans /><link data-rh=true rel=alternate href=/en/docs/cookbook/experiments/supervised-learning hreflang=en /><link data-rh=true rel=alternate href=/docs/cookbook/experiments/supervised-learning hreflang=x-default /><script data-rh=true type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"/docs/cookbook/experiments/","name":"对比实验","position":1},{"@type":"ListItem","item":"/docs/cookbook/experiments/supervised-learning","name":"SFT 对比实验","position":2}]}</script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css type=text/css integrity=sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV crossorigin=anonymous><link rel=stylesheet href=/assets/css/styles.0d3eb512.css /><script src=/assets/js/runtime~main.f02aa43f.js defer></script><script src=/assets/js/main.6ad5e1d6.js defer></script></head><body><svg style="display: none;"><defs>
+<symbol id=theme-svg-external-link viewBox="0 0 24 24"><path fill=currentColor d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme-947")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{for(var[t,e]of new URLSearchParams(window.location.search).entries())if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id=__docusaurus><link rel=preload as=image href=/img/logo.svg /><div role=region aria-label=跳到主要内容><a class=skipToContent_fXgn href=#__docusaurus_skipToContent_fallback>跳到主要内容</a></div><nav aria-label=主导航 class="theme-layout-navbar navbar navbar--fixed-top"><div class=navbar__inner><div class="theme-layout-navbar-left navbar__items"><button aria-label=切换导航栏 aria-expanded=false class="navbar__toggle clean-btn" type=button><svg width=30 height=30 viewBox="0 0 30 30" aria-hidden=true><path stroke=currentColor stroke-linecap=round stroke-miterlimit=10 stroke-width=2 d="M4 7h22M4 15h22M4 23h22"/></svg></button><a class=navbar__brand href=/><div class=navbar__logo><img src=/img/logo.svg alt="TCRL Docs Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"/><img src=/img/logo.svg alt="TCRL Docs Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"/></div><b class="navbar__title text--truncate">TCRL 文档</b></a><a class="navbar__item navbar__link" href=/docs/tinker/>Tinker SDK</a><a aria-current=page class="navbar__item navbar__link navbar__link--active" href=/docs/cookbook/>Cookbook</a><a href=https://tinker-docs.thinkingmachines.ai/tutorials/ target=_blank rel="noopener noreferrer" class="navbar__item navbar__link">教程<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><div class="navbar__item dropdown dropdown--hoverable dropdown--right"><a href=# aria-haspopup=true aria-expanded=false role=button class=navbar__link><svg viewBox="0 0 24 24" width=20 height=20 aria-hidden=true class=iconLanguage_nlXk><path fill=currentColor d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/></svg>简体中文</a><ul class=dropdown__menu><li><a href=/docs/cookbook/experiments/supervised-learning target=_self rel="noopener noreferrer" class="dropdown__link dropdown__link--active" lang=zh-Hans>简体中文</a><li><a href=/en/docs/cookbook/experiments/supervised-learning target=_self rel="noopener noreferrer" class=dropdown__link lang=en>English</a></ul></div><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type=button disabled title="system mode" aria-label="切换浅色/暗黑模式（当前为system mode）"><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill=currentColor d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"/></svg><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill=currentColor d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"/></svg><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill=currentColor d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"/></svg></button></div><div class=navbarSearchContainer_Bca1></div></div></div><div role=presentation class=navbar-sidebar__backdrop></div></nav><div id=__docusaurus_skipToContent_fallback class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class=docsWrapper_hBAB><button aria-label=回到顶部 class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type=button></button><div class=docRoot_UBD9><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class=sidebarViewport_aRkj><div class=sidebar_njMd><nav aria-label=文档侧边栏 class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/cookbook/><span title="Tinker Cookbook" class=linkLabel_WmDU>Tinker Cookbook</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/cookbook/quickstart><span title=快速开始 class=linkLabel_WmDU>快速开始</span></a><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--active" href=/docs/cookbook/experiments/><span title=对比实验 class=categoryLinkLabel_W154>对比实验</span></a><button aria-label="收起侧边栏分类 '对比实验'" aria-expanded=true type=button class="clean-btn menu__caret"></button></div><ul class=menu__list><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link menu__link--active" aria-current=page tabindex=0 href=/docs/cookbook/experiments/supervised-learning><span title="SFT 对比实验" class=linkLabel_WmDU>SFT 对比实验</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class=menu__link tabindex=0 href=/docs/cookbook/experiments/reinforce-learning><span title="RL 对比实验" class=linkLabel_WmDU>RL 对比实验</span></a></ul></ul></nav></div></div></aside><main class=docMainContainer_TBSr><div class="container padding-top--md padding-bottom--lg"><div class=row><div class="col docItemCol_VOVn"><div class=docItemContainer_Djhp><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label=页面路径><ul class=breadcrumbs><li class=breadcrumbs__item><a aria-label=主页面 class=breadcrumbs__link href=/><svg viewBox="0 0 24 24" class=breadcrumbHomeIcon_YNFT><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill=currentColor /></svg></a><li class=breadcrumbs__item><a class=breadcrumbs__link href=/docs/cookbook/experiments/><span>对比实验</span></a><li class="breadcrumbs__item breadcrumbs__item--active"><span class=breadcrumbs__link>SFT 对比实验</span></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type=button class="clean-btn tocCollapsibleButton_TO0P">本页总览</button></div><div class="theme-doc-markdown markdown"><header><h1>SFT 对比实验</h1></header>
+<p>本章节用于记录基于 tcrl_infra 的 SFT 对比实验结果。实验 1-2 验证 TCRL 与 Tinker 的训练等价性；实验 3-4 通过与多个 Proxy Model（小模型）和 Oracle Model（大模型）的结果对比，展示从小模型到大模型再到 TCRL SFT 后模型的性能提升路径，验证 TCRL（chat_sl）在文本分类任务上的有效性。</p>
+<hr/>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id=实验-1no_robots-数据集>实验 1：no_robots 数据集<a href=#实验-1no_robots-数据集 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=实验配置>实验配置<a href=#实验配置 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<ul>
+<li class=""><strong>模型</strong>: Qwen/Qwen3-8B-Base</li>
+<li class=""><strong>任务</strong>: no_robots 数据集上的 SFT 训练</li>
+<li class=""><strong>LoRA 配置</strong>: 64 rank, 5e-4 learning rate</li>
+<li class=""><strong>训练配置</strong>: 64 batch size, 1 epoch, Cosine Decay</li>
+<li class=""><strong>训练步数</strong>: 148 steps</li>
+<li class=""><strong>Eval 间隔</strong>: 每 20 steps</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=核心发现>核心发现<a href=#核心发现 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<p>TCRL 和 Tinker 在 no_robots 任务上取得了几乎一致的最终性能：</p>
+<ol>
+<li class=""><strong>最终性能相当</strong>: 测试集 NLL 仅相差 0.0025，几乎可以忽略不计。</li>
+<li class=""><strong>训练动态相似</strong>: 两者的 Train NLL 下降曲线呈现出高度一致的趋势。</li>
+<li class=""><strong>初始状态一致</strong>: 初始 test/nll 差异仅 0.0001，证明模型初始化和数据加载完全一致。</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=详细指标>详细指标<a href=#详细指标 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id=最终指标step-147>最终指标（Step 147）<a href=#最终指标step-147 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h4>
+<div class=table-responsive-wrapper><table><thead><tr><th>指标<th>Tinker<th>TCRL<th>差异 (TCRL - Tinker)<th>说明<tbody><tr><td><strong>测试 NLL (test/nll)</strong><td>1.7037<td>1.7062<td>+0.0025<td>几乎一致，差异 &lt; 0.2%<tr><td><strong>平均训练 NLL</strong><td>1.7082<td>1.7155<td>+0.0073<td>差异 &lt; 0.5%<tr><td><strong>初始测试 NLL</strong><td>1.8507<td>1.8506<td>-0.0001<td>完全一致<tr><td><strong>NLL 下降幅度</strong><td>-0.1470<td>-0.1444<td>+0.0026<td>下降幅度一致<tr><td><strong>平均步耗时</strong><td>1.30s<td>18.86s<td>+17.56s<td>TCRL 耗时较长<tr><td><strong>总训练时间</strong><td>~3.2 min<td>~46.5 min<td>—<td>TCRL 包含远程 API 通信开销</table></div>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id=训练过程统计>训练过程统计<a href=#训练过程统计 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h4>
+<div class=table-responsive-wrapper><table><thead><tr><th>指标<th>Tinker<th>TCRL<th>说明<tbody><tr><td><strong>Step 0-19 平均 NLL</strong><td>1.7324<td>1.7506<td>初始阶段差距 0.018<tr><td><strong>Step 20-49 平均 NLL</strong><td>1.7224<td>1.7312<td>差距缩小至 0.009<tr><td><strong>Step 50-99 平均 NLL</strong><td>1.6936<td>1.6998<td>差距缩小至 0.006<tr><td><strong>Step 100-147 平均 NLL</strong><td>1.7046<td>1.7075<td>最终差距仅 0.003</table></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=训练动态分析>训练动态分析<a href=#训练动态分析 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id=nll-曲线>NLL 曲线<a href=#nll-曲线 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h4>
+<ul>
+<li class=""><strong>训练 NLL</strong>: 两者均从 ~1.78 下降到 ~1.59，差距从初始的 0.018 缩小至最终的 0.003。</li>
+<li class=""><strong>测试 NLL</strong>: 两者在测试集上的最终表现几乎一致（1.7037 vs 1.7062），差异 &lt; 0.2%。</li>
+</ul>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id=梯度范数>梯度范数<a href=#梯度范数 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h4>
+<ul>
+<li class="">TCRL 记录的 <code>grad_norm</code> 显示交替出现大值和小值的模式，训练全程稳定无发散。</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=可视化对比>可视化对比<a href=#可视化对比 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<p><img decoding=async loading=lazy alt="no_robots NLL 对比" src=/assets/images/no-robots-nll-01eff9f1a4c5261b2ec1786136c74b80.png width=2086 height=772 class=img_ev3q /></p>
+<p><em>图 1: TCRL vs Tinker no_robots Train/Test NLL 对比</em></p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=结论>结论<a href=#结论 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<p>在相同的超参数配置下，Tinker 和 TCRL 在 no_robots 数据集上的 SFT 训练效果<strong>几乎完全一致</strong>。最终 test/nll 差距仅 0.0025（&lt; 0.2%），train_mean_nll 各阶段均值差距从 0.018 逐步缩小至 0.003，验证了 TCRL 框架 SFT 实现的正确性与 Tinker 的等价性。</p>
+<hr/>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id=实验-2tulu3-数据集>实验 2：tulu3 数据集<a href=#实验-2tulu3-数据集 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=实验配置-1>实验配置<a href=#实验配置-1 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<ul>
+<li class=""><strong>模型</strong>: Qwen/Qwen3-8B-Base</li>
+<li class=""><strong>任务</strong>: tulu3 数据集上的 SFT 训练</li>
+<li class=""><strong>LoRA 配置</strong>: 64 rank, 5e-4 learning rate</li>
+<li class=""><strong>训练配置</strong>: 128 batch size, Cosine Decay</li>
+<li class=""><strong>分析步数</strong>: 212 steps (Step 0-211)</li>
+<li class=""><strong>数据规模</strong>: ~7330 steps/epoch</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=核心发现-1>核心发现<a href=#核心发现-1 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<p>TCRL 和 Tinker 在 tulu3 大规模数据集上取得了高度一致的训练表现：</p>
+<ol>
+<li class=""><strong>初始状态完全一致</strong>: test/nll 差异仅 0.0004，证明模型初始化和数据加载一致。</li>
+<li class=""><strong>训练动态相似</strong>: 各阶段 train_mean_nll 均值差异均在 0.002-0.007 范围内。</li>
+<li class=""><strong>Loss 计算方式一致</strong>: 两者 <code>num_loss_tokens</code> 均为 ~128（per-sequence 归一化），NLL 可直接对比。</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=详细指标-1>详细指标<a href=#详细指标-1 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id=测试指标>测试指标<a href=#测试指标 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h4>
+<div class=table-responsive-wrapper><table><thead><tr><th>指标<th>Tinker<th>TCRL<th>差异 (TCRL - Tinker)<th>说明<tbody><tr><td><strong>初始测试 NLL (Step 0)</strong><td>0.9154<td>0.9158<td>+0.0004<td>完全一致<tr><td><strong>平均步耗时</strong><td>5.26s<td>50.51s<td>+45.25s<td>TCRL 耗时较长<tr><td><strong>总训练时间 (212 步)</strong><td>~18.6 min<td>~178.5 min<td>—<td>TCRL 包含远程 API 通信开销</table></div>
+<div class="theme-admonition theme-admonition-note admonition_xJq3 alert alert--secondary"><div class=admonitionHeading_Gvgb><span class=admonitionIcon_Rf37><svg viewBox="0 0 14 16"><path fill-rule=evenodd d="M6.3 5.69a.942.942 0 0 1-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 0 1-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"/></svg></span>备注</div><div class=admonitionContent_BuS1><p>由于 tulu3 数据集较大（约 7330 步/epoch），前 212 步中仅有 Step 0 的验证集评估数据。</div></div>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id=训练过程统计-1>训练过程统计<a href=#训练过程统计-1 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h4>
+<div class=table-responsive-wrapper><table><thead><tr><th>阶段<th>Tinker<th>TCRL<th>差异<th>说明<tbody><tr><td><strong>Step 0-19</strong><td>0.7886<td>0.7950<td>+0.0064<td>初始阶段<tr><td><strong>Step 20-49</strong><td>0.7353<td>0.7370<td>+0.0017<td>快速收敛期<tr><td><strong>Step 50-99</strong><td>0.7325<td>0.7338<td>+0.0013<td>稳定下降期<tr><td><strong>Step 100-149</strong><td>0.7250<td>0.7264<td>+0.0014<td>持续优化<tr><td><strong>Step 150-199</strong><td>0.7143<td>0.7161<td>+0.0018<td>后期稳定<tr><td><strong>Step 200-211</strong><td>0.7169<td>0.7182<td>+0.0013<td>最终阶段</table></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=训练动态分析-1>训练动态分析<a href=#训练动态分析-1 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id=nll-曲线-1>NLL 曲线<a href=#nll-曲线-1 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h4>
+<ul>
+<li class=""><strong>训练 NLL</strong>: 两者均从初始的 ~0.79 缓慢下降到 ~0.72，下降幅度约 0.07，在前 212 步（约 2.9% 训练进度）中处于稳定学习阶段。</li>
+<li class=""><strong>波动模式一致</strong>: 由于 batch 数据的随机性，单步 NLL 存在较大波动（约 0.6~0.9 范围），但两者波动趋势完全吻合。</li>
+</ul>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id=梯度范数-1>梯度范数<a href=#梯度范数-1 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h4>
+<ul>
+<li class="">TCRL 记录的 grad_norm 显示交替出现大值（10-170）和小值（0.1-4）的模式，可能与梯度累积或优化器状态有关，但未影响训练收敛。</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=可视化对比-1>可视化对比<a href=#可视化对比-1 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<p><img decoding=async loading=lazy alt="tulu3 NLL 对比" src=/assets/images/tulu3-nll-d33ea7be3a175138d73210c4bfba204f.png width=2086 height=772 class=img_ev3q /></p>
+<p><em>图 2: TCRL vs Tinker tulu3 Train/Test NLL 对比</em></p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=结论-1>结论<a href=#结论-1 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<p>在 tulu3 大规模数据集上，Tinker 和 TCRL 的 SFT 训练表现<strong>几乎完全一致</strong>。两者的 train_mean_nll 各阶段均值差异不超过 0.007，初始 test/nll 差异仅 0.0004。这证明了 TCRL 框架在大规模 SFT 任务上与 Tinker 具有等价的训练效果，验证了其实现的正确性。</p>
+<hr/>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id=实验-3sst-5-情感分类>实验 3：SST-5 情感分类<a href=#实验-3sst-5-情感分类 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h2>
+<p><strong>目标：</strong> 验证 TCRL（chat_sl）在小规模数据集上的 SFT 效果，展示从小模型到大模型再到 TCRL SFT 后模型的性能提升路径。</p>
+<p><strong>模型：</strong> Qwen/Qwen3-8B-Base, Qwen/Qwen3-8B</p>
+<p><strong>数据集：</strong> SST-5 五分类情感分析（训练集 8,544 条，测试集 2,210 条）</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=实验配置-2>实验配置<a href=#实验配置-2 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<div class=table-responsive-wrapper><table><thead><tr><th>配置项<th>TCRL (Qwen3-8B-Base)<th>TCRL (Qwen3-8B)<tbody><tr><td>LoRA rank<td>64<td>64<tr><td>Learning rate<td>5e-4<td>5e-4<tr><td>Batch size<td>64<td>64<tr><td>Eval every<td>20 steps<td>20 steps<tr><td>总训练步数<td>133<td>133</table></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=训练效率>训练效率<a href=#训练效率 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<div class=table-responsive-wrapper><table><thead><tr><th>指标<th>TCRL (Qwen3-8B-Base)<th>TCRL (Qwen3-8B)<tbody><tr><td><strong>总训练时间</strong><td>19.0 min<td>10.3 min<tr><td><strong>平均步耗时</strong><td>8.58s<td>4.64s<tr><td><strong>纯训练平均步耗时</strong><td>7.87s<td>3.87s<tr><td><strong>初始 Test NLL</strong><td>1.3670<td>23.4568<tr><td><strong>最终 Test NLL</strong><td>0.2063<td>0.4000<tr><td><strong>NLL 下降幅度</strong><td>-1.1607<td>-23.0568</table></div>
+<p>:::info 训练效率说明
+Qwen3-8B 的平均步耗时（3.87s）显著低于 Qwen3-8B-Base（7.87s），这是因为 Instruct 模型已具备指令跟随能力，训练收敛更快，而 Base 模型需要更多的梯度更新来学习输出格式。
+:::</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=实验结果>实验结果<a href=#实验结果 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<div class=table-responsive-wrapper><table><thead><tr><th>方法<th>模型<th>Accuracy<tbody><tr><td>Proxy Model<td>Qwen2.5-1.5B-Instruct<td>27.15%<tr><td>Proxy Model<td>Qwen2.5-3B-Instruct<td>46.61%<tr><td>Proxy Model<td>Qwen3-8B-Base<td>10.45%<tr><td>Proxy Model<td>Qwen3-8B<td>43.26%<tr><td>Oracle Model<td>Qwen3-30B-A3B-Instruct<td>56.74%<tr><td>Oracle Model<td>DeepSeek-V3.2<td>50.59%<tr><td><strong>TCRL (chat_sl)</strong><td><strong>Qwen3-8B-Base</strong><td><strong>43.76%</strong><tr><td><strong>TCRL (chat_sl)</strong><td><strong>Qwen3-8B</strong><td><strong>58.91%</strong></table></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=结论-2>结论<a href=#结论-2 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<ol>
+<li class="">
+<p><strong>TCRL SFT 有效提升模型表现</strong>: Qwen3-8B 经过 TCRL SFT 后达到 58.91%，超越了 Oracle 模型 Qwen3-30B-A3B-Instruct（56.74%）和 DeepSeek-V3.2（50.59%），证明了 SFT 的有效性。</p>
+</li>
+<li class="">
+<p><strong>基座模型选择的重要性</strong>: Qwen3-8B 经过 SFT 后（58.91%）显著优于 Qwen3-8B-Base 经过相同 SFT 后的结果（43.76%），说明在 Instruct 模型基础上进行 SFT 效果更好。</p>
+</li>
+<li class="">
+<p><strong>从小模型到大模型的提升路径清晰</strong>: 1.5B（27.15%）→ 3B（46.61%）→ 8B SFT（58.91%），模型能力随规模和训练逐步提升。</p>
+</li>
+</ol>
+<hr/>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id=实验-4agnews-新闻分类>实验 4：AGNews 新闻分类<a href=#实验-4agnews-新闻分类 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h2>
+<p><strong>目标：</strong> 验证 TCRL（chat_sl）在大规模数据集上的 SFT 效果，展示从小模型到大模型再到 TCRL SFT 后模型的性能提升路径。</p>
+<p><strong>模型：</strong> Qwen/Qwen3-8B-Base, Qwen/Qwen3-8B</p>
+<p><strong>数据集：</strong> AGNews 四分类新闻主题分类（训练集 120,000 条，测试集 2,000 条）</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=实验配置-3>实验配置<a href=#实验配置-3 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<div class=table-responsive-wrapper><table><thead><tr><th>配置项<th>TCRL (Qwen3-8B-Base)<th>TCRL (Qwen3-8B)<tbody><tr><td>LoRA rank<td>64<td>64<tr><td>Learning rate<td>5e-4<td>5e-4<tr><td>Batch size<td>128<td>128<tr><td>Eval every<td>50 steps<td>50 steps<tr><td>总训练步数<td>937<td>937</table></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=训练效率-1>训练效率<a href=#训练效率-1 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<div class=table-responsive-wrapper><table><thead><tr><th>指标<th>TCRL (Qwen3-8B-Base)<th>TCRL (Qwen3-8B)<tbody><tr><td><strong>总训练时间</strong><td>254.1 min (~4.2h)<td>129.1 min (~2.2h)<tr><td><strong>平均步耗时</strong><td>16.27s<td>8.27s<tr><td><strong>纯训练平均步耗时</strong><td>15.83s<td>7.96s<tr><td><strong>初始 Test NLL</strong><td>0.0650<td>23.2100<tr><td><strong>最终 Test NLL</strong><td>0.0301<td>0.0540<tr><td><strong>NLL 下降幅度</strong><td>-0.0349<td>-23.1560</table></div>
+<p>:::info 训练效率说明
+AGNews 数据集规模大（120K），训练步数为 937 步。Qwen3-8B 的纯训练平均步耗时（7.96s）约为 Qwen3-8B-Base（15.83s）的一半，整体训练效率提升约 2×。8B-Base 模型最终 Test NLL 更低（0.0301 vs 0.0540），但 8B 模型的分类准确率更高，说明 Instruct 模型在格式化输出方面更有优势。
+:::</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=实验结果-1>实验结果<a href=#实验结果-1 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<div class=table-responsive-wrapper><table><thead><tr><th>方法<th>模型<th>Accuracy<tbody><tr><td>Proxy Model<td>Qwen2.5-1.5B-Instruct<td>51.40%<tr><td>Proxy Model<td>Qwen2.5-3B-Instruct<td>69.90%<tr><td>Proxy Model<td>Qwen3-8B-Base<td>5.35%<tr><td>Proxy Model<td>Qwen3-8B<td>79.00%<tr><td>Oracle Model<td>Qwen3-30B-A3B-Instruct<td>86.50%<tr><td>Oracle Model<td>DeepSeek-V3.2<td>83.30%<tr><td><strong>TCRL (chat_sl)</strong><td><strong>Qwen3-8B-Base</strong><td><strong>95.50%</strong><tr><td><strong>TCRL (chat_sl)</strong><td><strong>Qwen3-8B</strong><td><strong>96.05%</strong></table></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=结论-3>结论<a href=#结论-3 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<ol>
+<li class="">
+<p><strong>TCRL SFT 大幅超越大模型</strong>: Qwen3-8B-Base（95.50%）和 Qwen3-8B（96.05%）经过 TCRL SFT 后均大幅超越 30B 级别大模型（86.50%），分别高出 +9.00% 和 +9.55%。</p>
+</li>
+<li class="">
+<p><strong>大规模数据集上基座模型差距缩小</strong>: 在 AGNews 大规模数据集上，Qwen3-8B-Base（95.50%）与 Qwen3-8B（96.05%）经过 SFT 后的差距仅 0.55%，远小于 SST-5 上的 15.15% 差距，说明充足的训练数据可以弥补 Base 模型与 Instruct 模型之间的能力差距。</p>
+</li>
+<li class="">
+<p><strong>从小模型到大模型的提升路径清晰</strong>: 1.5B（51.40%）→ 3B（69.90%）→ 8B SFT（96.05%），在大规模数据集上 SFT 的效果尤为显著。</p>
+</li>
+</ol>
+<hr/>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id=实验-5tnews-中文新闻分类>实验 5：TNews 中文新闻分类<a href=#实验-5tnews-中文新闻分类 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h2>
+<p><strong>目标：</strong> 验证 TCRL（chat_sl）在中文分类任务上的 SFT 效果，展示从小模型到大模型再到 TCRL SFT 后模型的性能提升路径。</p>
+<p><strong>模型：</strong> Qwen/Qwen3-8B-Base, Qwen/Qwen3-8B</p>
+<p><strong>数据集：</strong> TNews 15 分类中文新闻主题分类（训练集 53,360 条，测试集 1,837 条）</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=实验配置-4>实验配置<a href=#实验配置-4 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<div class=table-responsive-wrapper><table><thead><tr><th>配置项<th>TCRL (Qwen3-8B-Base)<th>TCRL (Qwen3-8B)<tbody><tr><td>LoRA rank<td>64<td>64<tr><td>Learning rate<td>5e-4<td>5e-4<tr><td>Batch size<td>128<td>128<tr><td>Eval every<td>50 steps<td>50 steps<tr><td>总训练步数<td>416<td>416</table></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=训练效率-2>训练效率<a href=#训练效率-2 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<div class=table-responsive-wrapper><table><thead><tr><th>指标<th>TCRL (Qwen3-8B)<tbody><tr><td><strong>总训练时间</strong><td>98.8 min (~1.6h)<tr><td><strong>平均步耗时</strong><td>14.25s<tr><td><strong>纯训练平均步耗时</strong><td>13.82s<tr><td><strong>初始 Test NLL</strong><td>16.8089<tr><td><strong>最终 Test NLL</strong><td>0.2362<tr><td><strong>NLL 下降幅度</strong><td>-16.5727</table></div>
+<p>:::info 训练效率说明
+TNews 数据集规模中等（53K），训练步数为 416 步。Qwen3-8B 从极高的初始 Test NLL（16.81）快速下降到 0.24，说明 Instruct 模型能在中文分类任务上快速学习新的分类体系。
+:::</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=实验结果-2>实验结果<a href=#实验结果-2 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<div class=table-responsive-wrapper><table><thead><tr><th>方法<th>模型<th>Accuracy<tbody><tr><td>Proxy Model<td>Qwen2.5-1.5B-Instruct<td>23.01%<tr><td>Proxy Model<td>Qwen2.5-3B-Instruct<td>41.74%<tr><td>Proxy Model<td>Qwen3-8B-Base<td>11.54%<tr><td>Proxy Model<td>Qwen3-8B<td>51.01%<tr><td>Oracle Model<td>Qwen3-30B-A3B-Instruct<td>52.25%<tr><td>Oracle Model<td>DeepSeek-V3.2<td>56.54%<tr><td><strong>TCRL (chat_sl)</strong><td><strong>Qwen3-8B-Base</strong><td><strong>69.19%</strong><tr><td><strong>TCRL (chat_sl)</strong><td><strong>Qwen3-8B</strong><td><strong>67.99%</strong></table></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=结论-4>结论<a href=#结论-4 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<ol>
+<li class="">
+<p><strong>TCRL SFT 大幅超越大模型</strong>: Qwen3-8B-Base（69.19%）和 Qwen3-8B（67.99%）经过 TCRL SFT 后均大幅超越 30B 级别大模型（52.25%）和 DeepSeek-V3.2（56.54%），分别高出 +12.65% 和 +11.45%。</p>
+</li>
+<li class="">
+<p><strong>Base 模型在中文分类上表现更优</strong>: 在 TNews 任务中，Qwen3-8B-Base（69.19%）经 SFT 后略优于 Qwen3-8B（67.99%），这可能是因为 Base 模型在中文任务上的训练数据更纯净，SFT 后能更好地适配特定分类体系。</p>
+</li>
+<li class="">
+<p><strong>从小模型到大模型的提升路径清晰</strong>: 1.5B（23.01%）→ 3B（41.74%）→ 8B SFT（69.19%），在中文分类任务上 SFT 同样带来显著提升。</p>
+</li>
+</ol>
+<hr/>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id=实验-6dbpedia-本体分类>实验 6：DBPedia 本体分类<a href=#实验-6dbpedia-本体分类 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h2>
+<p><strong>目标：</strong> 验证 TCRL（chat_sl）在超大规模数据集上的 SFT 效果，展示从小模型到大模型再到 TCRL SFT 后模型的性能提升路径。</p>
+<p><strong>模型：</strong> Qwen/Qwen3-8B-Base, Qwen/Qwen3-8B</p>
+<p><strong>数据集：</strong> DBPedia 14 分类本体分类（训练集 560,000 条，测试集 1,988 条）</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=实验配置-5>实验配置<a href=#实验配置-5 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<div class=table-responsive-wrapper><table><thead><tr><th>配置项<th>TCRL (Qwen3-8B-Base)<th>TCRL (Qwen3-8B)<tbody><tr><td>LoRA rank<td>64<td>64<tr><td>Learning rate<td>5e-4<td>5e-4<tr><td>Batch size<td>256<td>256<tr><td>Eval every<td>50 steps<td>50 steps<tr><td>总训练步数<td>500<td>500</table></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=训练效率-3>训练效率<a href=#训练效率-3 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<div class=table-responsive-wrapper><table><thead><tr><th>指标<th>TCRL (Qwen3-8B-Base)<th>TCRL (Qwen3-8B)<tbody><tr><td><strong>总训练时间</strong><td>250.8 min (~4.2h)<td>252.6 min (~4.2h)<tr><td><strong>平均步耗时</strong><td>30.09s<td>30.32s<tr><td><strong>纯训练平均步耗时</strong><td>29.38s<td>29.60s<tr><td><strong>初始 Test NLL</strong><td>1.1103<td>21.2056<tr><td><strong>最终 Test NLL</strong><td>0.0072<td>0.0112<tr><td><strong>NLL 下降幅度</strong><td>-1.1031<td>-21.1944</table></div>
+<p>:::info 训练效率说明
+DBPedia 数据集规模超大（560K），batch size 为 256，训练 500 步。两种模型的训练耗时几乎一致（~4.2h），这是因为在大 batch size 下训练效率趋于一致。8B-Base 的最终 Test NLL 更低（0.0072 vs 0.0112），两者的分类准确率也极为接近（99.50% vs 99.40%）。
+:::</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=实验结果-3>实验结果<a href=#实验结果-3 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<div class=table-responsive-wrapper><table><thead><tr><th>方法<th>模型<th>Accuracy<tbody><tr><td>Proxy Model<td>Qwen2.5-1.5B-Instruct<td>66.80%<tr><td>Proxy Model<td>Qwen2.5-3B-Instruct<td>86.00%<tr><td>Proxy Model<td>Qwen3-8B-Base<td>19.40%<tr><td>Proxy Model<td>Qwen3-8B<td>91.50%<tr><td>Oracle Model<td>Qwen3-30B-A3B-Instruct<td>96.70%<tr><td>Oracle Model<td>DeepSeek-V3.2<td>95.90%<tr><td><strong>TCRL (chat_sl)</strong><td><strong>Qwen3-8B-Base</strong><td><strong>99.50%</strong><tr><td><strong>TCRL (chat_sl)</strong><td><strong>Qwen3-8B</strong><td><strong>99.40%</strong></table></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=结论-5>结论<a href=#结论-5 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<ol>
+<li class="">
+<p><strong>TCRL SFT 接近完美分类</strong>: Qwen3-8B-Base（99.50%）和 Qwen3-8B（99.40%）经过 TCRL SFT 后均接近 100% 准确率，大幅超越 30B 级别大模型（96.70%），高出 +2.80% 和 +2.70%。</p>
+</li>
+<li class="">
+<p><strong>超大规模数据集上两种模型表现一致</strong>: 在 DBPedia 超大规模数据集（560K）上，Qwen3-8B-Base（99.50%）与 Qwen3-8B（99.40%）经过 SFT 后的差距仅 0.10%，进一步验证了充足的训练数据可以完全消除 Base 模型与 Instruct 模型之间的差距。</p>
+</li>
+<li class="">
+<p><strong>从小模型到大模型的提升路径清晰</strong>: 1.5B（66.80%）→ 3B（86.00%）→ 8B SFT（99.50%），在超大规模数据集上 SFT 能将模型推向接近完美的表现。</p>
+</li>
+</ol>
+<hr/>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id=实验-7thucnews-中文长文本新闻分类>实验 7：THUCNews 中文长文本新闻分类<a href=#实验-7thucnews-中文长文本新闻分类 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h2>
+<p><strong>目标：</strong> 验证 TCRL（chat_sl）在中文长文本分类任务上的 SFT 效果，展示从小模型到大模型再到 TCRL SFT 后模型的性能提升路径。</p>
+<p><strong>模型：</strong> Qwen/Qwen3-8B-Base, Qwen/Qwen3-8B</p>
+<p><strong>数据集：</strong> THUCNews 14 分类中文长文本新闻分类（训练集 46,000 条，测试集 2,000 条）</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=实验配置-6>实验配置<a href=#实验配置-6 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<div class=table-responsive-wrapper><table><thead><tr><th>配置项<th>TCRL (Qwen3-8B-Base)<th>TCRL (Qwen3-8B)<tbody><tr><td>LoRA rank<td>64<td>64<tr><td>Learning rate<td>5e-4<td>1e-4<tr><td>Batch size<td>128<td>128<tr><td>Eval every<td>50 steps<td>50 steps<tr><td>总训练步数<td>359<td>359</table></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=训练效率-4>训练效率<a href=#训练效率-4 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<div class=table-responsive-wrapper><table><thead><tr><th>指标<th>TCRL (Qwen3-8B-Base)<th>TCRL (Qwen3-8B)<tbody><tr><td><strong>总训练时间</strong><td>184.5 min (~3.1h)<td>185.6 min (~3.1h)<tr><td><strong>平均步耗时</strong><td>30.84s<td>31.03s<tr><td><strong>纯训练平均步耗时</strong><td>30.07s<td>30.26s<tr><td><strong>初始 Test NLL</strong><td>1.2518<td>19.9772<tr><td><strong>最终 Test NLL</strong><td>0.0084<td>0.0183<tr><td><strong>NLL 下降幅度</strong><td>-1.2434<td>-19.9589</table></div>
+<p>:::info 训练效率说明
+THUCNews 为中文长文本分类任务（46K 训练样本），训练步数为 359 步。由于文本较长，batch size 为 128 时两种模型的训练耗时几乎一致（~3.1h）。8B-Base 的最终 Test NLL 更低（0.0084 vs 0.0183），两者的分类准确率完全一致（98.80%）。Qwen3-8B 使用较小的学习率（1e-4 vs 5e-4）以获得更稳定的训练。
+:::</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=实验结果-4>实验结果<a href=#实验结果-4 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<div class=table-responsive-wrapper><table><thead><tr><th>方法<th>模型<th>Accuracy<tbody><tr><td>Proxy Model<td>Qwen2.5-1.5B-Instruct<td>50.80%<tr><td>Proxy Model<td>Qwen2.5-3B-Instruct<td>83.00%<tr><td>Proxy Model<td>Qwen3-8B-Base<td>19.40%<tr><td>Proxy Model<td>Qwen3-8B<td>81.00%<tr><td>Oracle Model<td>Qwen3-30B-A3B-Instruct<td>90.00%<tr><td>Oracle Model<td>DeepSeek-V3.2<td>87.80%<tr><td><strong>TCRL (chat_sl)</strong><td><strong>Qwen3-8B-Base</strong><td><strong>98.80%</strong><tr><td><strong>TCRL (chat_sl)</strong><td><strong>Qwen3-8B</strong><td><strong>98.80%</strong></table></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=结论-6>结论<a href=#结论-6 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<ol>
+<li class="">
+<p><strong>TCRL SFT 大幅超越大模型</strong>: Qwen3-8B-Base 和 Qwen3-8B 经过 TCRL SFT 后均达到 98.80%，大幅超越 30B 级别大模型（90.00%）和 DeepSeek-V3.2（87.80%），分别高出 +8.80% 和 +11.00%。</p>
+</li>
+<li class="">
+<p><strong>中文长文本任务上两种模型表现一致</strong>: 在 THUCNews 任务中，Qwen3-8B-Base 和 Qwen3-8B 经 SFT 后准确率完全一致（98.80%），说明在充足的中文长文本训练数据下，Base 模型和 Instruct 模型均能达到相同的高水平。</p>
+</li>
+<li class="">
+<p><strong>从小模型到大模型的提升路径清晰</strong>: 1.5B（50.80%）→ 3B（83.00%）→ 8B SFT（98.80%），在中文长文本分类任务上 SFT 带来显著提升。</p>
+</li>
+</ol>
+<hr/>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id=实验-8sst-2-情感分类>实验 8：SST-2 情感分类<a href=#实验-8sst-2-情感分类 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h2>
+<p><strong>目标：</strong> 验证 TCRL（chat_sl）在大规模二分类情感数据集上的 SFT 效果，展示从小模型到大模型再到 TCRL SFT 后模型的性能提升路径。</p>
+<p><strong>模型：</strong> Qwen/Qwen3-8B-Base, Qwen/Qwen3-8B</p>
+<p><strong>数据集：</strong> SST-2 二分类情感分析（训练集 67,349 条，测试集 872 条）</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=实验配置-7>实验配置<a href=#实验配置-7 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<div class=table-responsive-wrapper><table><thead><tr><th>配置项<th>TCRL (Qwen3-8B-Base)<th>TCRL (Qwen3-8B)<tbody><tr><td>LoRA rank<td>64<td>64<tr><td>Learning rate<td>5e-4<td>5e-4<tr><td>Batch size<td>128<td>128<tr><td>Eval every<td>50 steps<td>50 steps<tr><td>总训练步数<td>525<td>525<tr><td>LR Schedule<td>Linear<td>Linear</table></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=训练效率-5>训练效率<a href=#训练效率-5 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<div class=table-responsive-wrapper><table><thead><tr><th>指标<th>TCRL (Qwen3-8B-Base)<th>TCRL (Qwen3-8B)<tbody><tr><td><strong>总训练时间</strong><td>117.2 min (~2.0h)<td>118.9 min (~2.0h)<tr><td><strong>平均步耗时</strong><td>13.37s<td>13.56s<tr><td><strong>纯训练平均步耗时</strong><td>12.70s<td>12.87s<tr><td><strong>初始 Test NLL</strong><td>0.9749<td>26.4470<tr><td><strong>最终 Test NLL</strong><td>0.0272<td>0.0552<tr><td><strong>NLL 下降幅度</strong><td>-0.9477<td>-26.3918</table></div>
+<p>:::info 训练效率说明
+SST-2 数据集规模较大（67K 训练样本，文本较短），batch size 128 下 1 epoch 需要 525 步训练。两种模型的训练耗时几乎一致（~2.0h），由于输入序列较短，平均步耗时收敛在约 12.7s。8B-Base 的最终 Test NLL 更低（0.0272 vs 0.0552），而 Qwen3-8B 从极高的初始 Test NLL（26.45）快速下降到 0.0552，说明 Instruct 模型能够快速适应二分类情感任务的输出格式。
+:::</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=实验结果-5>实验结果<a href=#实验结果-5 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<div class=table-responsive-wrapper><table><thead><tr><th>方法<th>模型<th>Accuracy<tbody><tr><td>Proxy Model<td>Qwen2.5-1.5B-Instruct<td>90.83%<tr><td>Proxy Model<td>Qwen2.5-3B-Instruct<td>91.86%<tr><td>Proxy Model<td>Qwen3-8B-Base<td>91.97%<tr><td>Proxy Model<td>Qwen3-8B<td>93.92%<tr><td>Oracle Model<td>Qwen3-30B-A3B-Instruct<td>94.15%<tr><td>Oracle Model<td>DeepSeek-V3.2<td>95.18%<tr><td><strong>TCRL (chat_sl)</strong><td><strong>Qwen3-8B-Base</strong><td><strong>96.33%</strong><tr><td><strong>TCRL (chat_sl)</strong><td><strong>Qwen3-8B</strong><td><strong>96.79%</strong></table></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=结论-7>结论<a href=#结论-7 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<ol>
+<li class="">
+<p><strong>TCRL SFT 超越大模型</strong>: Qwen3-8B-Base（96.33%）和 Qwen3-8B（96.79%）经过 TCRL SFT 后均超越 30B 级别大模型（94.15%）和 DeepSeek-V3.2（95.18%），相比 Qwen3-30B-A3B-Instruct 分别高出 +2.18% 和 +2.64%，相比 DeepSeek-V3.2 分别高出 +1.15% 和 +1.61%。</p>
+</li>
+<li class="">
+<p><strong>大规模二分类任务上两种模型表现接近</strong>: 在 SST-2 任务中，Qwen3-8B-Base（96.33%）与 Qwen3-8B（96.79%）经 SFT 后差距仅 0.46%，远小于 SST-5 上的 15.15% 差距，进一步验证了在简单二分类任务上充足的训练数据可缩小 Base 模型与 Instruct 模型之间的差距。</p>
+</li>
+<li class="">
+<p><strong>从小模型到大模型的提升路径清晰</strong>: 1.5B（90.83%）→ 3B（91.86%）→ 8B SFT（96.79%），SFT 在二分类情感任务上带来稳定提升；由于二分类任务本身较简单，Proxy 小模型已能取得较高的基线准确率。</p>
+</li>
+</ol>
+<hr/>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id=实验-9imdb-长文本情感分类>实验 9：IMDb 长文本情感分类<a href=#实验-9imdb-长文本情感分类 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h2>
+<p><strong>目标：</strong> 验证 TCRL（chat_sl）在长文本二分类情感数据集上的 SFT 效果，展示从小模型到大模型再到 TCRL SFT 后模型的性能提升路径。</p>
+<p><strong>模型：</strong> Qwen/Qwen3-8B-Base, Qwen/Qwen3-8B</p>
+<p><strong>数据集：</strong> IMDb 长篇影评二分类情感分析（训练集 25,000 条，测试集 2,000 条）</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=实验配置-8>实验配置<a href=#实验配置-8 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<div class=table-responsive-wrapper><table><thead><tr><th>配置项<th>TCRL (Qwen3-8B-Base)<th>TCRL (Qwen3-8B)<tbody><tr><td>LoRA rank<td>64<td>64<tr><td>Learning rate<td>1e-5<td>1e-5<tr><td>Batch size<td>128<td>128<tr><td>Eval every<td>10 steps<td>50 steps<tr><td>总训练步数<td>195（1 epoch）<td>195（1 epoch）<tr><td>LR Schedule<td>Linear<td>Linear</table></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=训练效率-6>训练效率<a href=#训练效率-6 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<div class=table-responsive-wrapper><table><thead><tr><th>指标<th>TCRL (Qwen3-8B-Base)<th>TCRL (Qwen3-8B)<tbody><tr><td><strong>总训练时间</strong><td>97.2 min (~1.6h)<td>94.5 min (~1.6h)<tr><td><strong>平均步耗时</strong><td>29.91s<td>29.08s<tr><td><strong>纯训练平均步耗时</strong><td>13.22s<td>26.01s<tr><td><strong>初始 Test NLL</strong><td>1.0373<td>26.9905<tr><td><strong>最终 Test NLL</strong><td>0.0252<td>0.0660<tr><td><strong>NLL 下降幅度</strong><td>-1.0121<td>-26.9245</table></div>
+<p>:::info 训练效率说明
+IMDb 数据集为长篇影评（平均约 230 词），是本报告中 token 数量最多的分类任务。两种模型均使用相同的学习率（1e-5）训练完整 1 epoch（195 步）。8B-Base 使用了更频繁的评估间隔（每 10 步 vs 每 50 步），因此尽管其纯训练步耗时更短（13.22s vs 26.01s——Qwen3-8B 使用的 <code>qwen3</code> renderer 会附加 chat 模板 token，使序列更长），整体训练时长仍接近（~1.6h），主要是因为评估开销较高（54.2 min vs 10.0 min）。8B-Base 最终 Test NLL 更低（0.0252 vs 0.0660），分类准确率也略高（95.75% vs 95.00%）。
+:::</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=实验结果-6>实验结果<a href=#实验结果-6 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<div class=table-responsive-wrapper><table><thead><tr><th>方法<th>模型<th>Accuracy<tbody><tr><td>Proxy Model<td>Qwen2.5-1.5B-Instruct<td>92.90%<tr><td>Proxy Model<td>Qwen2.5-3B-Instruct<td>93.30%<tr><td>Proxy Model<td>Qwen3-8B-Base<td>93.31%<tr><td>Proxy Model<td>Qwen3-8B<td>94.00%<tr><td>Oracle Model<td>Qwen3-30B-A3B-Instruct<td>93.60%<tr><td>Oracle Model<td>DeepSeek-V3.2<td>94.85%<tr><td><strong>TCRL (chat_sl)</strong><td><strong>Qwen3-8B-Base</strong><td><strong>95.75%</strong><tr><td><strong>TCRL (chat_sl)</strong><td><strong>Qwen3-8B</strong><td><strong>95.00%</strong></table></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=结论-8>结论<a href=#结论-8 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<ol>
+<li class="">
+<p><strong>TCRL SFT 超越大模型</strong>: Qwen3-8B-Base（95.75%）和 Qwen3-8B（95.00%）经过 TCRL SFT 后均超越 30B 级别大模型（93.60%）和 DeepSeek-V3.2（94.85%），相比 Qwen3-30B-A3B-Instruct 分别高出 +2.15% 和 +1.40%，相比 DeepSeek-V3.2 分别高出 +0.90% 和 +0.15%。</p>
+</li>
+<li class="">
+<p><strong>Base 模型完整 epoch 训练后可比肩 Instruct</strong>: 在 IMDb 任务中，Qwen3-8B-Base（95.75%）经 SFT 后略优于 Qwen3-8B（95.00%），差距仅 0.75%。在相同的学习率（1e-5）和相同训练步数（195）下，Base 模型最终 Test NLL 更低（0.0252 vs 0.0660），在长文本二分类情感任务上分类准确率也略高。</p>
+</li>
+<li class="">
+<p><strong>从小模型到大模型的提升路径清晰</strong>: 1.5B（92.90%）→ 3B（93.30%）→ 8B SFT（95.75%），SFT 在长文本二分类情感任务上带来稳定提升。Proxy 小模型已具备较高基线（约 93%），这是因为 IMDb 二分类情感模式较为通用、数据集广为人知，留给 SFT 的提升空间相对有限。</p>
+</li>
+</ol>
+<hr/>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id=总结>总结<a href=#总结 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=性能对比总览>性能对比总览<a href=#性能对比总览 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id=imdb-长文本情感分析训练集-25000--测试集-2000>IMDb 长文本情感分析（训练集 25,000 / 测试集 2,000）<a href=#imdb-长文本情感分析训练集-25000--测试集-2000 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h4>
+<p><img decoding=async loading=lazy alt="IMDb Accuracy Comparison" src=/assets/images/imdb_accuracy-82e10b2a223c3c8298243373dac84d3e.png width=2084 height=883 class=img_ev3q /></p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id=sst-2-情感分析训练集-67349--测试集-872>SST-2 情感分析（训练集 67,349 / 测试集 872）<a href=#sst-2-情感分析训练集-67349--测试集-872 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h4>
+<p><img decoding=async loading=lazy alt="SST-2 Accuracy Comparison" src=/assets/images/sst2_accuracy-5e633d82f59bae235f43a9648ef55d22.png width=2084 height=883 class=img_ev3q /></p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id=sst-5-情感分析训练集-8544--测试集-2210>SST-5 情感分析（训练集 8,544 / 测试集 2,210）<a href=#sst-5-情感分析训练集-8544--测试集-2210 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h4>
+<p><img decoding=async loading=lazy alt="SST-5 Accuracy Comparison" src=/assets/images/sst5_accuracy-afeb4b2bf82655f665c85f966155e2ec.png width=2084 height=883 class=img_ev3q /></p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id=agnews-新闻分类训练集-120000--测试集-2000>AGNews 新闻分类（训练集 120,000 / 测试集 2,000）<a href=#agnews-新闻分类训练集-120000--测试集-2000 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h4>
+<p><img decoding=async loading=lazy alt="AGNews Accuracy Comparison" src=/assets/images/ag_news_accuracy-3c64888440f04cca48c17ac943210fd9.png width=2084 height=883 class=img_ev3q /></p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id=tnews-中文新闻分类训练集-53360--测试集-1837>TNews 中文新闻分类（训练集 53,360 / 测试集 1,837）<a href=#tnews-中文新闻分类训练集-53360--测试集-1837 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h4>
+<p><img decoding=async loading=lazy alt="TNews Accuracy Comparison" src=/assets/images/tnews_accuracy-1e25ac6dfb61270cbde3185d6af69145.png width=2084 height=883 class=img_ev3q /></p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id=dbpedia-本体分类训练集-560000--测试集-1988>DBPedia 本体分类（训练集 560,000 / 测试集 1,988）<a href=#dbpedia-本体分类训练集-560000--测试集-1988 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h4>
+<p><img decoding=async loading=lazy alt="DBPedia Accuracy Comparison" src=/assets/images/dbpedia_accuracy-19b44768bef7e747fb14fc58fde7653a.png width=2084 height=883 class=img_ev3q /></p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id=thucnews-中文长文本新闻分类训练集-46000--测试集-2000>THUCNews 中文长文本新闻分类（训练集 46,000 / 测试集 2,000）<a href=#thucnews-中文长文本新闻分类训练集-46000--测试集-2000 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h4>
+<p><img decoding=async loading=lazy alt="THUCNews Accuracy Comparison" src=/assets/images/thucnews_accuracy-f6f6e3c7f6d001f0d3de5216ee8c74e7.png width=2084 height=882 class=img_ev3q /></p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=详细数据>详细数据<a href=#详细数据 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<div class=table-responsive-wrapper><table><thead><tr><th>Dataset<th>分类<th>训练数据<th>测试数据<th>Qwen2.5-1.5B-Instruct<th>Qwen2.5-3B-Instruct<th>Qwen3-8B-Base<th>Qwen3-8B<th>Qwen3-30B-A3B-Instruct<th>DeepSeek-V3.2<th>Tinker (Qwen3-8B-Base)<th>TCRL (Qwen3-8B-Base)<th>TCRL (Qwen3-8B)<tbody><tr><td>IMDb<td>情感分析（长文本）<td>25,000<td>2,000<td>92.90%<td>93.30%<td>93.31%<td>94.00%<td>93.60%<td>94.85%<td>pending<td><strong>95.75%</strong><td><strong>95.00%</strong><tr><td>SST-2<td>情感分析<td>67,349<td>872<td>90.83%<td>91.86%<td>91.97%<td>93.92%<td>94.15%<td>95.18%<td>pending<td><strong>96.33%</strong><td><strong>96.79%</strong><tr><td>SST-5<td>情感分析<td>8,544<td>2,210<td>27.15%<td>46.61%<td>10.45%<td>43.26%<td>56.74%<td>50.59%<td>57.92%<td>43.76%<td><strong>58.91%</strong><tr><td>AGNews<td>新闻分类（英文）<td>120,000<td>2,000<td>51.40%<td>69.90%<td>5.35%<td>79.00%<td>86.50%<td>83.30%<td>90.39%<td><strong>95.50%</strong><td><strong>96.05%</strong><tr><td>TNews<td>新闻分类（中文）<td>53,360<td>1,837<td>23.01%<td>41.74%<td>11.54%<td>51.01%<td>52.25%<td>56.54%<td>pending<td><strong>69.19%</strong><td><strong>67.99%</strong><tr><td>DBPedia<td>本体分类<td>560,000<td>1,988<td>66.80%<td>86.00%<td>19.40%<td>91.50%<td>96.70%<td>95.90%<td>pending<td><strong>99.50%</strong><td><strong>99.40%</strong><tr><td>THUCNews<td>新闻分类（中文长文本）<td>46,000<td>2,000<td>50.80%<td>83.00%<td>19.40%<td>81.00%<td>90.00%<td>87.80%<td>pending<td><strong>98.80%</strong><td><strong>98.80%</strong></table></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=核心结论>核心结论<a href=#核心结论 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<ol>
+<li class="">
+<p><strong>SFT 有效超越大模型</strong>: 使用 Qwen3-8B 模型进行 TCRL SFT 后，在全部七个数据集上均大幅超越 30B 级别大模型。DBPedia 达到 99.50%（+2.80%）；THUCNews 达到 98.80%（+8.80%）；AGNews 达到 96.05%（+9.55%）；SST-2 达到 96.79%（+2.64%）；IMDb 达到 95.75%（+2.15%）；TNews 达到 69.19%（+12.65%）；SST-5 达到 58.91%，超越所有 Oracle 模型。</p>
+</li>
+<li class="">
+<p><strong>Instruct 模型 SFT 效果因任务而异</strong>: 在英文短文本任务（SST-5、AGNews、SST-2）上 Qwen3-8B 优于 Qwen3-8B-Base；在长文本二分类任务（IMDb）和中文短文本任务（TNews）上 Qwen3-8B-Base 略优；在超大规模数据集（DBPedia）和中文长文本任务（THUCNews）上两者表现一致。不同任务的最优基座模型选择需要实验验证。</p>
+</li>
+<li class="">
+<p><strong>数据规模影响基座模型差距</strong>: 在超大数据集 DBPedia（560K）上差距仅 0.10%；THUCNews（46K）上差距 0.00%；AGNews（120K）上差距 0.55%；SST-2（67K）上差距 0.46%；IMDb（25K）上差距 0.75%；TNews（53K）上差距 1.20%；小数据集 SST-5（8.5K）上差距达到 15.15%。充足的训练数据是 SFT 成功的关键因素。</p>
+</li>
+<li class="">
+<p><strong>训练效率合理</strong>: SST-5 任务约 10 分钟，IMDb 任务约 1.6 小时，TNews 任务约 1.6 小时，SST-2 任务约 2.0 小时，AGNews 任务约 2.2 小时，THUCNews 任务约 3.1 小时，DBPedia 任务约 4.2 小时，平均步耗时 8~31s，训练效率满足实际使用需求。</p>
+</li>
+</ol></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label=文档分页导航><a class="pagination-nav__link pagination-nav__link--prev" href=/docs/cookbook/experiments/><div class=pagination-nav__sublabel>上一页</div><div class=pagination-nav__label>对比实验</div></a><a class="pagination-nav__link pagination-nav__link--next" href=/docs/cookbook/experiments/reinforce-learning><div class=pagination-nav__sublabel>下一页</div><div class=pagination-nav__label>RL 对比实验</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href=#实验-1no_robots-数据集 class="table-of-contents__link toc-highlight">实验 1：no_robots 数据集</a><ul><li><a href=#实验配置 class="table-of-contents__link toc-highlight">实验配置</a><li><a href=#核心发现 class="table-of-contents__link toc-highlight">核心发现</a><li><a href=#详细指标 class="table-of-contents__link toc-highlight">详细指标</a><li><a href=#训练动态分析 class="table-of-contents__link toc-highlight">训练动态分析</a><li><a href=#可视化对比 class="table-of-contents__link toc-highlight">可视化对比</a><li><a href=#结论 class="table-of-contents__link toc-highlight">结论</a></ul><li><a href=#实验-2tulu3-数据集 class="table-of-contents__link toc-highlight">实验 2：tulu3 数据集</a><ul><li><a href=#实验配置-1 class="table-of-contents__link toc-highlight">实验配置</a><li><a href=#核心发现-1 class="table-of-contents__link toc-highlight">核心发现</a><li><a href=#详细指标-1 class="table-of-contents__link toc-highlight">详细指标</a><li><a href=#训练动态分析-1 class="table-of-contents__link toc-highlight">训练动态分析</a><li><a href=#可视化对比-1 class="table-of-contents__link toc-highlight">可视化对比</a><li><a href=#结论-1 class="table-of-contents__link toc-highlight">结论</a></ul><li><a href=#实验-3sst-5-情感分类 class="table-of-contents__link toc-highlight">实验 3：SST-5 情感分类</a><ul><li><a href=#实验配置-2 class="table-of-contents__link toc-highlight">实验配置</a><li><a href=#训练效率 class="table-of-contents__link toc-highlight">训练效率</a><li><a href=#实验结果 class="table-of-contents__link toc-highlight">实验结果</a><li><a href=#结论-2 class="table-of-contents__link toc-highlight">结论</a></ul><li><a href=#实验-4agnews-新闻分类 class="table-of-contents__link toc-highlight">实验 4：AGNews 新闻分类</a><ul><li><a href=#实验配置-3 class="table-of-contents__link toc-highlight">实验配置</a><li><a href=#训练效率-1 class="table-of-contents__link toc-highlight">训练效率</a><li><a href=#实验结果-1 class="table-of-contents__link toc-highlight">实验结果</a><li><a href=#结论-3 class="table-of-contents__link toc-highlight">结论</a></ul><li><a href=#实验-5tnews-中文新闻分类 class="table-of-contents__link toc-highlight">实验 5：TNews 中文新闻分类</a><ul><li><a href=#实验配置-4 class="table-of-contents__link toc-highlight">实验配置</a><li><a href=#训练效率-2 class="table-of-contents__link toc-highlight">训练效率</a><li><a href=#实验结果-2 class="table-of-contents__link toc-highlight">实验结果</a><li><a href=#结论-4 class="table-of-contents__link toc-highlight">结论</a></ul><li><a href=#实验-6dbpedia-本体分类 class="table-of-contents__link toc-highlight">实验 6：DBPedia 本体分类</a><ul><li><a href=#实验配置-5 class="table-of-contents__link toc-highlight">实验配置</a><li><a href=#训练效率-3 class="table-of-contents__link toc-highlight">训练效率</a><li><a href=#实验结果-3 class="table-of-contents__link toc-highlight">实验结果</a><li><a href=#结论-5 class="table-of-contents__link toc-highlight">结论</a></ul><li><a href=#实验-7thucnews-中文长文本新闻分类 class="table-of-contents__link toc-highlight">实验 7：THUCNews 中文长文本新闻分类</a><ul><li><a href=#实验配置-6 class="table-of-contents__link toc-highlight">实验配置</a><li><a href=#训练效率-4 class="table-of-contents__link toc-highlight">训练效率</a><li><a href=#实验结果-4 class="table-of-contents__link toc-highlight">实验结果</a><li><a href=#结论-6 class="table-of-contents__link toc-highlight">结论</a></ul><li><a href=#实验-8sst-2-情感分类 class="table-of-contents__link toc-highlight">实验 8：SST-2 情感分类</a><ul><li><a href=#实验配置-7 class="table-of-contents__link toc-highlight">实验配置</a><li><a href=#训练效率-5 class="table-of-contents__link toc-highlight">训练效率</a><li><a href=#实验结果-5 class="table-of-contents__link toc-highlight">实验结果</a><li><a href=#结论-7 class="table-of-contents__link toc-highlight">结论</a></ul><li><a href=#实验-9imdb-长文本情感分类 class="table-of-contents__link toc-highlight">实验 9：IMDb 长文本情感分类</a><ul><li><a href=#实验配置-8 class="table-of-contents__link toc-highlight">实验配置</a><li><a href=#训练效率-6 class="table-of-contents__link toc-highlight">训练效率</a><li><a href=#实验结果-6 class="table-of-contents__link toc-highlight">实验结果</a><li><a href=#结论-8 class="table-of-contents__link toc-highlight">结论</a></ul><li><a href=#总结 class="table-of-contents__link toc-highlight">总结</a><ul><li><a href=#性能对比总览 class="table-of-contents__link toc-highlight">性能对比总览</a><li><a href=#详细数据 class="table-of-contents__link toc-highlight">详细数据</a><li><a href=#核心结论 class="table-of-contents__link toc-highlight">核心结论</a></ul></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class=footer__title>文档</div><ul class="footer__items clean-list"><li class=footer__item><a class=footer__link-item href=/docs/intro>概览</a><li class=footer__item><a class=footer__link-item href=/docs/tinker>Tinker SDK</a><li class=footer__item><a href=https://tinker-docs.thinkingmachines.ai/tutorials/ target=_blank rel="noopener noreferrer" class=footer__link-item>教程<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a class=footer__link-item href=/docs/cookbook>Cookbook</a></ul></div><div class="theme-layout-footer-column col footer__col"><div class=footer__title>来源</div><ul class="footer__items clean-list"><li class=footer__item><a href=https://tinker-docs.thinkingmachines.ai target=_blank rel="noopener noreferrer" class=footer__link-item>tinker-docs（上游）<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></ul></div></div><div class="footer__bottom text--center"><div class=footer__copyright>Copyright © 2026 TCRL Docs · 基于 Docusaurus 构建。</div></div></div></footer></div></body>

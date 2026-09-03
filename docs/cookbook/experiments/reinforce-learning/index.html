@@ -1,0 +1,131 @@
+<!doctype html><html lang=zh-Hans dir=ltr class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-cookbook/experiments/reinforce-learning" data-has-hydrated=false><head><meta charset=UTF-8><meta name=generator content="Docusaurus v3.10.1"><title data-rh=true>RL 对比实验 | TCRL Docs</title><meta data-rh=true name=viewport content="width=device-width, initial-scale=1.0"/><meta data-rh=true name=twitter:card content=summary_large_image /><meta data-rh=true property=og:image content=/img/docusaurus-social-card.jpg /><meta data-rh=true name=twitter:image content=/img/docusaurus-social-card.jpg /><meta data-rh=true property=og:url content=/docs/cookbook/experiments/reinforce-learning /><meta data-rh=true property=og:locale content=zh_Hans /><meta data-rh=true property=og:locale:alternate content=en /><meta data-rh=true name=docusaurus_locale content=zh-Hans /><meta data-rh=true name=docsearch:language content=zh-Hans /><meta data-rh=true name=docusaurus_version content=current /><meta data-rh=true name=docusaurus_tag content=docs-default-current /><meta data-rh=true name=docsearch:version content=current /><meta data-rh=true name=docsearch:docusaurus_tag content=docs-default-current /><meta data-rh=true property=og:title content="RL 对比实验 | TCRL Docs"/><meta data-rh=true name=description content="本文档展示了 TCRL（Tinker Cookbook RL）与 Tinker 在两个基准数据集——MATH 和 GSM8K——上的对比实验结果，均使用 Qwen3-4B-Instruct-2507 作为基础模型。实验结果表明，TCRL 与 Tinker 在训练效果上基本一致，验证了 TCRL 作为开源替代方案的有效性。"/><meta data-rh=true property=og:description content="本文档展示了 TCRL（Tinker Cookbook RL）与 Tinker 在两个基准数据集——MATH 和 GSM8K——上的对比实验结果，均使用 Qwen3-4B-Instruct-2507 作为基础模型。实验结果表明，TCRL 与 Tinker 在训练效果上基本一致，验证了 TCRL 作为开源替代方案的有效性。"/><link data-rh=true rel=icon href=/img/logo.svg /><link data-rh=true rel=canonical href=/docs/cookbook/experiments/reinforce-learning /><link data-rh=true rel=alternate href=/docs/cookbook/experiments/reinforce-learning hreflang=zh-Hans /><link data-rh=true rel=alternate href=/en/docs/cookbook/experiments/reinforce-learning hreflang=en /><link data-rh=true rel=alternate href=/docs/cookbook/experiments/reinforce-learning hreflang=x-default /><script data-rh=true type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"/docs/cookbook/experiments/","name":"对比实验","position":1},{"@type":"ListItem","item":"/docs/cookbook/experiments/reinforce-learning","name":"RL 对比实验","position":2}]}</script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css type=text/css integrity=sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV crossorigin=anonymous><link rel=stylesheet href=/assets/css/styles.0d3eb512.css /><script src=/assets/js/runtime~main.f02aa43f.js defer></script><script src=/assets/js/main.6ad5e1d6.js defer></script></head><body><svg style="display: none;"><defs>
+<symbol id=theme-svg-external-link viewBox="0 0 24 24"><path fill=currentColor d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme-947")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{for(var[t,e]of new URLSearchParams(window.location.search).entries())if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id=__docusaurus><link rel=preload as=image href=/img/logo.svg /><div role=region aria-label=跳到主要内容><a class=skipToContent_fXgn href=#__docusaurus_skipToContent_fallback>跳到主要内容</a></div><nav aria-label=主导航 class="theme-layout-navbar navbar navbar--fixed-top"><div class=navbar__inner><div class="theme-layout-navbar-left navbar__items"><button aria-label=切换导航栏 aria-expanded=false class="navbar__toggle clean-btn" type=button><svg width=30 height=30 viewBox="0 0 30 30" aria-hidden=true><path stroke=currentColor stroke-linecap=round stroke-miterlimit=10 stroke-width=2 d="M4 7h22M4 15h22M4 23h22"/></svg></button><a class=navbar__brand href=/><div class=navbar__logo><img src=/img/logo.svg alt="TCRL Docs Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"/><img src=/img/logo.svg alt="TCRL Docs Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"/></div><b class="navbar__title text--truncate">TCRL 文档</b></a><a class="navbar__item navbar__link" href=/docs/tinker/>Tinker SDK</a><a aria-current=page class="navbar__item navbar__link navbar__link--active" href=/docs/cookbook/>Cookbook</a><a href=https://tinker-docs.thinkingmachines.ai/tutorials/ target=_blank rel="noopener noreferrer" class="navbar__item navbar__link">教程<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><div class="navbar__item dropdown dropdown--hoverable dropdown--right"><a href=# aria-haspopup=true aria-expanded=false role=button class=navbar__link><svg viewBox="0 0 24 24" width=20 height=20 aria-hidden=true class=iconLanguage_nlXk><path fill=currentColor d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/></svg>简体中文</a><ul class=dropdown__menu><li><a href=/docs/cookbook/experiments/reinforce-learning target=_self rel="noopener noreferrer" class="dropdown__link dropdown__link--active" lang=zh-Hans>简体中文</a><li><a href=/en/docs/cookbook/experiments/reinforce-learning target=_self rel="noopener noreferrer" class=dropdown__link lang=en>English</a></ul></div><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type=button disabled title="system mode" aria-label="切换浅色/暗黑模式（当前为system mode）"><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill=currentColor d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"/></svg><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill=currentColor d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"/></svg><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill=currentColor d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"/></svg></button></div><div class=navbarSearchContainer_Bca1></div></div></div><div role=presentation class=navbar-sidebar__backdrop></div></nav><div id=__docusaurus_skipToContent_fallback class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class=docsWrapper_hBAB><button aria-label=回到顶部 class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type=button></button><div class=docRoot_UBD9><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class=sidebarViewport_aRkj><div class=sidebar_njMd><nav aria-label=文档侧边栏 class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/cookbook/><span title="Tinker Cookbook" class=linkLabel_WmDU>Tinker Cookbook</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/cookbook/quickstart><span title=快速开始 class=linkLabel_WmDU>快速开始</span></a><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--active" href=/docs/cookbook/experiments/><span title=对比实验 class=categoryLinkLabel_W154>对比实验</span></a><button aria-label="收起侧边栏分类 '对比实验'" aria-expanded=true type=button class="clean-btn menu__caret"></button></div><ul class=menu__list><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class=menu__link tabindex=0 href=/docs/cookbook/experiments/supervised-learning><span title="SFT 对比实验" class=linkLabel_WmDU>SFT 对比实验</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link menu__link--active" aria-current=page tabindex=0 href=/docs/cookbook/experiments/reinforce-learning><span title="RL 对比实验" class=linkLabel_WmDU>RL 对比实验</span></a></ul></ul></nav></div></div></aside><main class=docMainContainer_TBSr><div class="container padding-top--md padding-bottom--lg"><div class=row><div class="col docItemCol_VOVn"><div class=docItemContainer_Djhp><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label=页面路径><ul class=breadcrumbs><li class=breadcrumbs__item><a aria-label=主页面 class=breadcrumbs__link href=/><svg viewBox="0 0 24 24" class=breadcrumbHomeIcon_YNFT><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill=currentColor /></svg></a><li class=breadcrumbs__item><a class=breadcrumbs__link href=/docs/cookbook/experiments/><span>对比实验</span></a><li class="breadcrumbs__item breadcrumbs__item--active"><span class=breadcrumbs__link>RL 对比实验</span></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type=button class="clean-btn tocCollapsibleButton_TO0P">本页总览</button></div><div class="theme-doc-markdown markdown"><header><h1>TCRL vs Tinker 训练效果对比</h1></header>
+<p>本文档展示了 TCRL（Tinker Cookbook RL）与 Tinker 在两个基准数据集——<strong>MATH</strong> 和 <strong>GSM8K</strong>——上的对比实验结果，均使用 Qwen3-4B-Instruct-2507 作为基础模型。实验结果表明，TCRL 与 Tinker 在训练效果上基本一致，验证了 TCRL 作为开源替代方案的有效性。</p>
+<hr/>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id=实验一math-数据集>实验一：MATH 数据集<a href=#实验一math-数据集 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=实验配置>实验配置<a href=#实验配置 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<ul>
+<li class=""><strong>模型</strong>: Qwen-Qwen3-4B-Instruct-2507</li>
+<li class=""><strong>任务</strong>: MATH 数据集上的强化学习训练</li>
+<li class=""><strong>LoRA 配置</strong>: 32 rank, 2e-05 learning rate</li>
+<li class=""><strong>训练配置</strong>: 16 group size, 64 batch size, importance sampling</li>
+<li class=""><strong>随机种子</strong>: 0</li>
+<li class=""><strong>训练步数</strong>: 188 steps</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=核心发现>核心发现<a href=#核心发现 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<p>TCRL 和 Tinker 在 MATH 任务上取得了几乎一致的最终性能：</p>
+<ol>
+<li class=""><strong>最终性能相当</strong>: 测试集上的最终奖励仅相差 0.0036，几乎可以忽略不计。</li>
+<li class=""><strong>训练动态相似</strong>: 两者的训练奖励增长曲线、格式准确率、正确性指标都呈现出高度一致的趋势。</li>
+<li class=""><strong>KL 散度一致</strong>: 两者在训练过程中的 KL 散度保持在同一水平，说明 TCRL 正确实现了重要性采样和策略更新逻辑。</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=详细指标>详细指标<a href=#详细指标 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id=最终指标step-187>最终指标（Step 187）<a href=#最终指标step-187 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h4>
+<div class=table-responsive-wrapper><table><thead><tr><th>指标<th>TCRL<th>Tinker<th>差异 (Tinker - TCRL)<th>说明<tbody><tr><td><strong>训练奖励 (train reward)</strong><td>0.7738<td>0.7477<td>-0.0262<td>TCRL 略高，差异 &lt; 4%<tr><td><strong>测试奖励 (test reward)</strong><td>0.7534<td>0.7570<td>+0.0036<td>几乎一致，差异 &lt; 0.5%<tr><td><strong>训练正确率 (train correct)</strong><td>0.7832<td>0.7617<td>-0.0215<td>TCRL 略高<tr><td><strong>测试正确率 (test correct)</strong><td>0.7620<td>0.7720<td>+0.0100<td>几乎一致<tr><td><strong>训练格式准确率 (train format)</strong><td>0.9062<td>0.8594<td>-0.0469<td>TCRL 格式准确率更高<tr><td><strong>策略熵 (entropy)</strong><td>0.1104<td>0.0869<td>-0.0235<td>TCRL 探索更充分<tr><td><strong>KL 散度 v1 (kl_v1)</strong><td>0.0005<td>0.0005<td>+0.0001<td>完全一致<tr><td><strong>每步耗时 (time/total)</strong><td>56.47s<td>56.30s<td>-0.17s<td>最终步耗时一致</table></div>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id=训练过程统计>训练过程统计<a href=#训练过程统计 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h4>
+<div class=table-responsive-wrapper><table><thead><tr><th>指标<th>TCRL<th>Tinker<th>说明<tbody><tr><td><strong>平均训练奖励</strong><td>0.6810<td>0.6528<td>TCRL 整体训练过程奖励略高<tr><td><strong>奖励增长</strong><td>+0.4119<td>+0.3817<td>两者都实现了稳定的奖励提升<tr><td><strong>平均步耗时</strong><td>121.3s<td>63.0s<td>TCRL 训练耗时较长，可能存在优化空间</table></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=训练动态分析>训练动态分析<a href=#训练动态分析 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id=奖励曲线>奖励曲线<a href=#奖励曲线 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h4>
+<ul>
+<li class=""><strong>训练奖励</strong>: TCRL 和 Tinker 的训练奖励均从 ~0.36 增长到 ~0.76，增长幅度分别为 +0.41 和 +0.38。</li>
+<li class=""><strong>测试奖励</strong>: 两者在测试集上的最终表现几乎一致（0.7534 vs 0.7570），说明 TCRL 没有出现明显的过拟合。</li>
+</ul>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id=格式与正确性>格式与正确性<a href=#格式与正确性 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h4>
+<ul>
+<li class=""><strong>格式准确率</strong>: TCRL 的最终格式准确率为 90.6%，高于 Tinker 的 85.9%，表明 TCRL 在生成格式规范方面表现更优。</li>
+<li class=""><strong>正确率</strong>: 测试集正确率两者分别为 76.2% 和 77.2%，差异微小。</li>
+</ul>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id=kl-散度>KL 散度<a href=#kl-散度 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h4>
+<ul>
+<li class=""><strong>KL(sampler ‖ trainer)</strong>: 两者的 KL 散度均维持在 0.0005 左右，表明 TCRL 正确实现了与 Tinker 一致的 KL 控制逻辑，避免了策略更新过程中的分布偏移。</li>
+</ul>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id=策略熵>策略熵<a href=#策略熵 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h4>
+<ul>
+<li class="">TCRL 的策略熵（0.1104）略高于 Tinker（0.0869），表明 TCRL 在训练过程中保持了更好的探索性，这可能有助于避免过早收敛到次优策略。</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=训练效率>训练效率<a href=#训练效率 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<ul>
+<li class=""><strong>单步耗时（最终步）</strong>: 两者基本一致（~56s）</li>
+<li class=""><strong>平均耗时</strong>: TCRL 的平均步耗时为 121.3s，显著高于 Tinker 的 63.0s（加速比 1.92×）</li>
+</ul>
+<p><strong>分析</strong>: TCRL 平均耗时较长的主要原因可能是：</p>
+<ol>
+<li class="">早期训练步骤中采样耗时较长（TCRL 使用远程 API 采样，而 Tinker 可能使用了更优化的采样策略）</li>
+<li class="">缺乏某些性能优化（如异步采样、批处理优化等）</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=可视化对比>可视化对比<a href=#可视化对比 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<p>下图展示了 TCRL 与 Tinker 在 9 个关键指标上的训练曲线对比：</p>
+<p><img decoding=async loading=lazy alt=对比图 src=/assets/images/math-de51d8a8794de5062ea667f6133cfbb1.png width=3941 height=2516 class=img_ev3q /></p>
+<p><em>图 1: TCRL vs Tinker MATH 训练指标对比（3×3 面板）</em></p>
+<p>面板说明：</p>
+<ol>
+<li class=""><strong>Train/Test Reward</strong>: 训练集和测试集的奖励曲线</li>
+<li class=""><strong>Format & Correct (train/test)</strong>: 格式准确率和正确答案率</li>
+<li class=""><strong>Group Composition</strong>: 训练组中全对/混合/全错的占比</li>
+<li class=""><strong>Policy Entropy</strong>: 策略熵，衡量探索程度</li>
+<li class=""><strong>Gradient Norm</strong>: 梯度范数（对数坐标）</li>
+<li class=""><strong>KL Divergence</strong>: KL 散度，衡量采样与训练策略的差异</li>
+<li class=""><strong>Per-step Time</strong>: 每步耗时分解（采样/训练/保存检查点）</li>
+<li class=""><strong>Tokens per Turn</strong>: 每轮的 token 数（动作/观察）</li>
+</ol>
+<hr/>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id=实验二gsm8k-数据集>实验二：GSM8K 数据集<a href=#实验二gsm8k-数据集 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=实验配置-1>实验配置<a href=#实验配置-1 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<ul>
+<li class=""><strong>模型</strong>: Qwen/Qwen3-4B-Instruct-2507</li>
+<li class=""><strong>训练步数</strong>: 50</li>
+<li class=""><strong>日期</strong>: 2026-05-19</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=最终结果>最终结果<a href=#最终结果 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<div class=table-responsive-wrapper><table><thead><tr><th>指标<th>Tinker<th>TCRL<tbody><tr><td><strong>基线准确率</strong><td>0.9100 (91/100)<td>0.9300 (93/100)<tr><td><strong>训练后准确率</strong><td>0.9300 (93/100)<td>0.9200 (92/100)<tr><td><strong>提升幅度</strong><td>+0.0200<td>-0.0100</table></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=训练过程对比>训练过程对比<a href=#训练过程对比 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<div class=table-responsive-wrapper><table><thead><tr><th>指标<th>Tinker<th>TCRL<tbody><tr><td><strong>平均 reward</strong><td>~0.956<td>~0.949<tr><td><strong>reward 范围</strong><td>0.820~1.000<td>0.820~1.000<tr><td><strong>Degenerate 比例</strong><td>81%~100%<td>75%~100%<tr><td><strong>每步平均耗时</strong><td>~12.3s<td>~20.0s<tr><td><strong>总训练时间</strong><td>~10min 35s<td>~16min 47s</table></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=分析>分析<a href=#分析 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<ol>
+<li class="">
+<p><strong>基线差异</strong>: 两次运行基线不同（91% vs 93%），属于正常采样波动范围，差异仅为 2 个样本。</p>
+</li>
+<li class="">
+<p><strong>提升幅度均很小</strong>: Tinker +2%，TCRL -1%，两者变化量都在基线波动范围内，不具备统计显著性。</p>
+</li>
+<li class="">
+<p><strong>训练速度</strong>: Tinker 每步约 12.3s，TCRL 约 20.0s，Tinker 快约 38%。但速度差异可能与运行时的负载、网络等因素有关。</p>
+</li>
+<li class="">
+<p><strong>Degenerate 比例极高</strong>: 两者 degenerate 比例均在 75%~100%，绝大多数 group 内 rollout 完全相同，有效训练数据（datums）极少。这是 GSM8K 上模型已经很强的典型表现，RL 训练空间有限。</p>
+</li>
+<li class="">
+<p><strong>训练后期 reward 波动</strong>: 两者在 Step 36~49 附近 reward 都出现波动下降，稳定性类似。</p>
+</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=可视化对比-1>可视化对比<a href=#可视化对比-1 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<p>下图展示了 TCRL 与 Tinker 在 GSM8K 数据集上的训练曲线对比：</p>
+<p><img decoding=async loading=lazy alt="GSM8K 对比图" src=/assets/images/gsm8k-dcbf4691bc06eb3609d1a99773f4ea51.png width=1973 height=1658 class=img_ev3q /></p>
+<p><em>图 2: TCRL vs Tinker GSM8K 训练指标对比</em></p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=结论>结论<a href=#结论 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<p><strong>两者在 GSM8K 上没有显著差异。</strong> 提升幅度都很小（+2% vs -1%），且均在基线采样波动范围内，不具备统计意义。根本原因在于 GSM8K 对 Qwen3-4B-Instruct-2507 已属于高准确率任务（基线 91%~93%），模型 rollout 几乎没有多样性（degenerate 比例极高），RL 训练的边际收益有限。两者表现相当。</p>
+<hr/>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id=总结与展望>总结与展望<a href=#总结与展望 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=总结>总结<a href=#总结 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<ol>
+<li class="">
+<p><strong>跨任务验证 TCRL 有效性</strong>: 在 MATH 和 GSM8K 两个任务上，TCRL 均取得了与 Tinker 基本一致的表现——MATH 上测试奖励差异 &lt; 0.5%，GSM8K 上差异在基线波动范围内。这验证了 TCRL 作为开源 RL 训练框架的正确性和可用性。</p>
+</li>
+<li class="">
+<p><strong>训练动态高度一致</strong>: 两者的奖励增长、格式准确率、KL 散度、degenerate 比例等关键指标呈现出高度相似的趋势，说明 TCRL 正确实现了 Tinker 的核心算法逻辑。</p>
+</li>
+<li class="">
+<p><strong>存在优化空间</strong>: TCRL 的训练效率仍有提升空间——在 MATH 上慢约 1.9×，在 GSM8K 上慢约 1.6×。后续需结合硬件进一步优化以缩小差距。</p>
+</li>
+<li class="">
+<p><strong>高准确率任务的收益天花板</strong>: 在 GSM8K 这类模型已表现优异的高准确率任务上，由于 degenerate 比例极高，RL 训练的边际收益有限。这是任务-模型组合的固有特性，而非框架本身的局限。</p>
+</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=后续工作>后续工作<a href=#后续工作 class=hash-link aria-label=标题的直接链接 title=标题的直接链接 translate=no>​</a></h3>
+<ol>
+<li class=""><strong>性能优化</strong>: 结合硬件进一步优化 TCRL 的采样和训练流程，提升训练效率。</li>
+<li class=""><strong>更多任务验证</strong>: 在更多任务上验证 TCRL 的通用性，尤其是基线准确率较低、RL 提升空间更大的任务。</li>
+<li class=""><strong>功能完善</strong>: 支持更多的 Loss Functions 及训练策略，扩展 TCRL 的适用范围。</li>
+</ol></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label=文档分页导航><a class="pagination-nav__link pagination-nav__link--prev" href=/docs/cookbook/experiments/supervised-learning><div class=pagination-nav__sublabel>上一页</div><div class=pagination-nav__label>SFT 对比实验</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href=#实验一math-数据集 class="table-of-contents__link toc-highlight">实验一：MATH 数据集</a><ul><li><a href=#实验配置 class="table-of-contents__link toc-highlight">实验配置</a><li><a href=#核心发现 class="table-of-contents__link toc-highlight">核心发现</a><li><a href=#详细指标 class="table-of-contents__link toc-highlight">详细指标</a><li><a href=#训练动态分析 class="table-of-contents__link toc-highlight">训练动态分析</a><li><a href=#训练效率 class="table-of-contents__link toc-highlight">训练效率</a><li><a href=#可视化对比 class="table-of-contents__link toc-highlight">可视化对比</a></ul><li><a href=#实验二gsm8k-数据集 class="table-of-contents__link toc-highlight">实验二：GSM8K 数据集</a><ul><li><a href=#实验配置-1 class="table-of-contents__link toc-highlight">实验配置</a><li><a href=#最终结果 class="table-of-contents__link toc-highlight">最终结果</a><li><a href=#训练过程对比 class="table-of-contents__link toc-highlight">训练过程对比</a><li><a href=#分析 class="table-of-contents__link toc-highlight">分析</a><li><a href=#可视化对比-1 class="table-of-contents__link toc-highlight">可视化对比</a><li><a href=#结论 class="table-of-contents__link toc-highlight">结论</a></ul><li><a href=#总结与展望 class="table-of-contents__link toc-highlight">总结与展望</a><ul><li><a href=#总结 class="table-of-contents__link toc-highlight">总结</a><li><a href=#后续工作 class="table-of-contents__link toc-highlight">后续工作</a></ul></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class=footer__title>文档</div><ul class="footer__items clean-list"><li class=footer__item><a class=footer__link-item href=/docs/intro>概览</a><li class=footer__item><a class=footer__link-item href=/docs/tinker>Tinker SDK</a><li class=footer__item><a href=https://tinker-docs.thinkingmachines.ai/tutorials/ target=_blank rel="noopener noreferrer" class=footer__link-item>教程<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a class=footer__link-item href=/docs/cookbook>Cookbook</a></ul></div><div class="theme-layout-footer-column col footer__col"><div class=footer__title>来源</div><ul class="footer__items clean-list"><li class=footer__item><a href=https://tinker-docs.thinkingmachines.ai target=_blank rel="noopener noreferrer" class=footer__link-item>tinker-docs（上游）<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></ul></div></div><div class="footer__bottom text--center"><div class=footer__copyright>Copyright © 2026 TCRL Docs · 基于 Docusaurus 构建。</div></div></div></footer></div></body>

@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkdocs=self.webpackChunkdocs||[]).push([["106"],{284(e,s,a){a.d(s,{A:()=>l});var c=a(4848);a(6540);let l={...a(799).A,table:function(e){return(0,c.jsx)("div",{className:"table-responsive-wrapper",children:(0,c.jsx)("table",{...e})})}}}}]);
