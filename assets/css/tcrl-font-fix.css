@@ -1,0 +1,162 @@
+/* TCRL public mirror typography alignment
+   Keep the GitHub Pages mirror visually close to the original internal Docusaurus site. */
+:root {
+  --ifm-font-size-base: 14px;
+  --ifm-line-height-base: 1.5;
+  --ifm-navbar-height: 3.25rem;
+}
+
+html {
+  font-size: 14px;
+}
+
+body {
+  font-size: 14px;
+  line-height: 1.5;
+  text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+.navbar {
+  min-height: 52px;
+  font-size: 14px;
+}
+
+.navbar__brand,
+.navbar__item,
+.navbar__link {
+  font-size: 14px;
+}
+
+.navbar__title {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.heroBanner_qdFl {
+  min-height: 314px;
+  padding-top: 72px !important;
+  padding-bottom: 58px !important;
+}
+
+.heroEyebrow_zkLo {
+  font-size: 12px !important;
+  line-height: 18px !important;
+  padding: 4px 10px !important;
+}
+
+.hero__title {
+  font-size: clamp(36px, 4vw, 46px) !important;
+  line-height: 1.15 !important;
+  letter-spacing: -0.02em;
+  margin-bottom: 12px !important;
+}
+
+.hero__subtitle {
+  font-size: 15px !important;
+  line-height: 1.55 !important;
+  margin-bottom: 0 !important;
+}
+
+.buttons_AeoN {
+  margin-top: 24px !important;
+  gap: 12px !important;
+}
+
+.buttons_AeoN .button {
+  font-size: 14px !important;
+  line-height: 20px !important;
+  padding: 10px 28px !important;
+  min-height: 40px;
+}
+
+.features_t9lD {
+  padding-top: 60px !important;
+  padding-bottom: 76px !important;
+}
+
+.sectionTitle_JIRO {
+  font-size: 28px !important;
+  line-height: 1.25 !important;
+  margin-bottom: 14px !important;
+}
+
+.sectionSubtitle_KlzO {
+  font-size: 14px !important;
+  line-height: 1.7 !important;
+}
+
+.featureRow_DEue {
+  margin-top: 44px !important;
+}
+
+.featureCard_QAQr {
+  min-height: 286px;
+  padding: 24px !important;
+  border-radius: 14px !important;
+  font-size: 14px !important;
+  line-height: 1.65 !important;
+}
+
+.featureIcon_GA8l {
+  width: 36px !important;
+  height: 36px !important;
+  font-size: 18px !important;
+}
+
+.featureTag_x7YY {
+  font-size: 11px !important;
+  padding: 4px 9px !important;
+}
+
+.featureTitle_L1YZ {
+  font-size: 18px !important;
+  line-height: 1.35 !important;
+  margin-top: 14px !important;
+  margin-bottom: 10px !important;
+}
+
+.featureDescription_sP1D,
+.featureHighlights_MmgZ,
+.featureHighlights_MmgZ li,
+.featureCta_BUQY {
+  font-size: 13px !important;
+  line-height: 1.65 !important;
+}
+
+.theme-doc-markdown,
+.markdown,
+.table-of-contents,
+.menu,
+.pagination-nav,
+.breadcrumbs {
+  font-size: 14px;
+}
+
+.markdown h1 {
+  font-size: 2.1rem;
+}
+
+.markdown h2 {
+  font-size: 1.55rem;
+}
+
+.markdown h3 {
+  font-size: 1.25rem;
+}
+
+@media (max-width: 996px) {
+  .heroBanner_qdFl {
+    min-height: 280px;
+    padding-top: 56px !important;
+    padding-bottom: 48px !important;
+  }
+
+  .hero__title {
+    font-size: 34px !important;
+  }
+
+  .features_t9lD {
+    padding-top: 48px !important;
+  }
+}
